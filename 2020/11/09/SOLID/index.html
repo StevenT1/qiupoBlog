@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicont.png">
+  <link rel="icon" type="image/png" href="/img/favicont.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="秋坡博客">
+  <meta name="author" content="Taoqiupo">
+  <meta name="keywords" content="">
+  <title>SOLID - qiupoBlog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":50,"cursorChar":"🇨🇳","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>QiuPo'Park</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/moonbg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="SOLID">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Taoqiupo
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-09 14:00" pubdate>
+        2020年11月9日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      909 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      10
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SOLID</h1>
+            
+            <div class="markdown-body">
+              <h2 id="设计模式之SOLID原则"><a href="#设计模式之SOLID原则" class="headerlink" title="设计模式之SOLID原则"></a>设计模式之SOLID原则</h2><p>&emsp;&emsp;SOLID原则是为了让程序员更加轻松的开发出易于维护和拓展的软件，避免代码的冗杂，让我们可以很轻松的重构代码。<code>SOLID</code>原则的五大原则分别为：</p>
+<h2 id="单一职责原则-Single-Responsibility-Principle-SRP"><a href="#单一职责原则-Single-Responsibility-Principle-SRP" class="headerlink" title="单一职责原则(Single Responsibility Principle, SRP)"></a>单一职责原则(Single Responsibility Principle, SRP)</h2><p>&emsp;&emsp;<code>SRP</code>简单来说就是解耦，类似于工厂里的分工方式，每个工人只需要做好一件事就可以了（当然现在这个社会其实每个人不能只会一样，不利于个人发展的），对于我们软件中的类来说也是这样的，每个类只需要负责某一方面的职责即可，如此可以方便我们对这些类进行复用，组合。实现高内聚低耦合的设计原则。不过因为将功能进行了较为细致的拆分，所以在需要进行大面积修改时可能会有不小的工作量。</p>
+<h2 id="开闭原则-Open-Closed-Principle-OCP"><a href="#开闭原则-Open-Closed-Principle-OCP" class="headerlink" title="开闭原则(Open-Closed Principle, OCP)"></a>开闭原则(Open-Closed Principle, OCP)</h2><p>对象应该可以进行扩展，但是不能进行修改。软件的需求发生改变后，我们的系统应该保持设计框架的稳定，不能因为一个需求的修改出现大量的更改，当我们的软件符合开闭原则之后，我们可以对某个需要修改的组件对象进行扩展，而不用修改现有的代码，降低了维护成本。</p>
+<h2 id="里氏代换原则-Liskov-Substitution-Principle"><a href="#里氏代换原则-Liskov-Substitution-Principle" class="headerlink" title="里氏代换原则(Liskov Substitution Principle)"></a>里氏代换原则(Liskov Substitution Principle)</h2><p>&emsp;&emsp;里氏替换原则是Liskov提出的关于继承的一些原则。Robert C. Martin简化的说过里氏替换原则就是**<em>Subtypes must be substitutable for their base types**</em>，就是说子类必须能够替换他们的基类。因此我们需要注意以下几点：</p>
+<ul>
+<li>子类必须实现父类的抽象方法，但不得重写（覆盖）父类的非抽象（已实现）方法。</li>
+<li>子类中可以增加自己特有的方法。</li>
+<li>当子类覆盖或实现父类的方法时，方法的前置条件（即方法的形参）要比- 父类方法的输入参数更宽松。(即只能重载不能重写)</li>
+<li>当子类的方法实现父类的抽象方法时，方法的后置条件（即方法的返回值）要比父类更严格。</li>
+</ul>
+<pre><code class="hljs javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">father</span></span>&#123;
+  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">x, y</span>)</span> &#123;
+    <span class="hljs-built_in">this</span>.x = x;
+    <span class="hljs-built_in">this</span>.y = y;
+  &#125;
+  <span class="hljs-function"><span class="hljs-title">sum</span>(<span class="hljs-params"></span>)</span> &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.x+<span class="hljs-built_in">this</span>.y;
+  &#125;
+&#125;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">son</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">father</span></span>&#123;
+    <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">x,y</span>)</span>&#123;
+    <span class="hljs-built_in">super</span>(x,y);
+  &#125;
+  <span class="hljs-function"><span class="hljs-title">minus</span>(<span class="hljs-params">x,y</span>)</span>&#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.x-<span class="hljs-built_in">this</span>.y;
+  &#125;
+&#125;
+<span class="hljs-keyword">let</span> fat = <span class="hljs-keyword">new</span> father(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)
+<span class="hljs-keyword">let</span> so = <span class="hljs-keyword">new</span> son(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)
+<span class="hljs-built_in">console</span>.log(fat.sum(),so.sum(),so.minus());
+<span class="hljs-comment">// 3  3  -1</span>
+<span class="hljs-comment">//父类被子类替换后结果也是一样的</span></code></pre>
+<h2 id="依赖倒置原则-Dependence-Inversion-Principle-DIP"><a href="#依赖倒置原则-Dependence-Inversion-Principle-DIP" class="headerlink" title="依赖倒置原则(Dependence Inversion Principle,DIP)"></a>依赖倒置原则(Dependence Inversion Principle,DIP)</h2><p>&emsp;&emsp;实体必须依赖抽象而不依赖具体。高级模块一定不能依赖于低级模块，而应该依赖于抽象。简单来说就是将我们平时的依赖反转，不再是高级模块去依赖低级模块，而是低级模块反向依赖一个抽象类，然后高级模块也依赖于这个抽象类。从而剥离模块之间的关联，达到了解耦的目的。关于这块还有一个IOC控制反转，利用容器将控制权反转，将对象的获得等控制权交给容器，如此来降低耦合。</p>
+<h2 id="接口隔离原则-Interface-Segregation-Principle-ISP"><a href="#接口隔离原则-Interface-Segregation-Principle-ISP" class="headerlink" title="接口隔离原则(Interface Segregation Principle, ISP)"></a>接口隔离原则(Interface Segregation Principle, ISP)</h2><p>&emsp;&emsp;要为各个类建立它们需要的专用接口，而不要试图去建立一个很庞大的接口供所有依赖它的类去调用。<br>参考于：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/3268264ae581">更详细的六大设计原则</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/solid/">solid</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/09/RESTFULL/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">RESTFULL</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/03/promise%E4%B8%89%E5%85%84%E5%BC%9F/">
+                        <span class="hidden-mobile">Promise三兄弟all,race,allsettled</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="remark42"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('remark42', function() {
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema !== 'light' && schema !== 'dark') {
+        schema = 'light';
+      }
+      var remark_config = {
+        host: 'http://42.192.68.190:8889',
+        site_id: 'qiupo',
+        components: ['embed'],
+        url: '/2020/11/09/SOLID/',
+        max_shown_comments: '10',
+        theme: schema,
+        page_title: 'SOLID',
+        locale: 'zh'
+      };
+
+      (function (c) {
+        for (var i = 0; i < c.length; i++) {
+          var d = document, s = d.createElement('script');
+          s.src = remark_config.host + '/web/' + c[i] + '.js';
+          s.defer = true;
+          (d.head || d.body).appendChild(s);
+        }
+      })(remark_config.components || [ 'embed' ]);
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">赣ICP备18015863号-2</a>
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

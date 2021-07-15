@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicont.png">
+  <link rel="icon" type="image/png" href="/img/favicont.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="秋坡博客">
+  <meta name="author" content="Taoqiupo">
+  <meta name="keywords" content="">
+  <title>Promise三兄弟all,race,allsettled - qiupoBlog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":50,"cursorChar":"🇨🇳","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>QiuPo'Park</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/moonbg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Promise三兄弟all,race,allsettled">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Taoqiupo
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-10-03 21:46" pubdate>
+        2020年10月3日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      623 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      10
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Promise三兄弟all,race,allsettled</h1>
+            
+            <div class="markdown-body">
+              <h2 id="all"><a href="#all" class="headerlink" title="all"></a>all</h2><p>Promise.all(iterable) 方法返回一个 Promise 实例，此实例在 iterable 参数内所有的 promise 都“完成（resolved）”或参数中不包含 promise 时回调完成（resolve）；如果参数中  promise 有一个失败（rejected），此实例回调失败（reject），失败的原因是第一个失败 promise 的结果。</p>
+<pre><code class="hljs reasonml">const promise1=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">1</span>);
+const promise2=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">2</span>);
+const promise3=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-number">3</span>);
+const promise4=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">4</span>);
+const promise = <span class="hljs-literal">[<span class="hljs-identifier">promise1</span>,<span class="hljs-identifier">promise2</span>,<span class="hljs-identifier">promise3</span>,<span class="hljs-identifier">promise4</span>]</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>all(promise).<span class="hljs-keyword">then</span>(<span class="hljs-keyword">val</span>=&gt;&#123;
+    <span class="hljs-keyword">val</span>.<span class="hljs-keyword">for</span><span class="hljs-constructor">Each(<span class="hljs-params">r</span>=&gt;<span class="hljs-params">console</span>.<span class="hljs-params">log</span>(<span class="hljs-params">r</span>)</span>)
+&#125;).catch(res=&gt;&#123;
+    console.log(res)
+&#125;)
+<span class="hljs-comment">//3</span></code></pre>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>all的特性是只要有一个<code>rejected</code>就返回该失败结果，其他的都当作没发生。</p>
+<pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myAll</span>(<span class="hljs-params">promises</span>)</span>&#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-keyword">async</span> (r,j)=&gt;&#123;
+    <span class="hljs-keyword">let</span> data = [],Err,isError=<span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> promises)&#123;
+        <span class="hljs-keyword">if</span>(isError) <span class="hljs-keyword">break</span>;
+                promise = promise <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Promise</span> ? promise : <span class="hljs-built_in">Promise</span>.resolve(promise);
+            <span class="hljs-keyword">await</span>   promise.then(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>&#123;
+            data.push(res);
+        &#125;,<span class="hljs-function"><span class="hljs-params">error</span>=&gt;</span>&#123;
+          isError=<span class="hljs-literal">true</span>;
+            j(error)
+        &#125;)
+        &#125;
+    
+    r(data);
+  &#125;)
+&#125;</code></pre>
+<h2 id="race"><a href="#race" class="headerlink" title="race"></a>race</h2><p>Promise.race(iterable) 方法返回一个 promise，一旦迭代器中的某个promise解决或拒绝，返回的 promise就会解决或拒绝。</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> promise1=<span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> promise2=<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;
+  <span class="hljs-built_in">setTimeout</span>(reject, <span class="hljs-number">500</span>, <span class="hljs-string">&#x27;500&#x27;</span>);
+&#125;);
+<span class="hljs-keyword">const</span> promise3 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;
+  <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>, <span class="hljs-string">&#x27;1000&#x27;</span>);
+&#125;);
+<span class="hljs-keyword">const</span> promise4=<span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-number">4</span>);
+<span class="hljs-keyword">const</span> promise = [promise3,promise2,promise1,promise4];
+<span class="hljs-built_in">Promise</span>.race(promise).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> &#123;
+  <span class="hljs-built_in">console</span>.log(value);
+&#125;);
+<span class="hljs-comment">// 1 1最快得到结果，所以只会输出1</span></code></pre>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myRace</span>(<span class="hljs-params">promises</span>)</span>&#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">r,j</span>)=&gt;</span>&#123;
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> promises)&#123;
+                promise = promise <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Promise</span> ? promise : <span class="hljs-built_in">Promise</span>.resolve(promise);
+            promise.then(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>&#123;
+            r(res)
+        &#125;,<span class="hljs-function"><span class="hljs-params">error</span>=&gt;</span>&#123;
+            j(error)
+        &#125;)
+        &#125;
+  &#125;)
+&#125;</code></pre>
+<h2 id="allsettled"><a href="#allsettled" class="headerlink" title="allsettled"></a>allsettled</h2><p>Promise.allSettled()方法返回一个在所有给定的promise都已经fulfilled或rejected后的promise，并带有一个对象数组，每个对象表示对应的promise结果。当有多个彼此不依赖的异步任务成功完成时，或者我们要得到每个promise的结果的时候，可以使用。</p>
+<pre><code class="hljs reasonml">const promise1=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">1</span>);
+const promise2=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">2</span>);
+const promise3=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>reject(<span class="hljs-number">3</span>);
+const promise4=<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>resolve(<span class="hljs-number">4</span>);
+const promise = <span class="hljs-literal">[<span class="hljs-identifier">promise1</span>,<span class="hljs-identifier">promise2</span>,<span class="hljs-identifier">promise3</span>,<span class="hljs-identifier">promise4</span>]</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Promise</span>.</span></span>all<span class="hljs-constructor">Settled(<span class="hljs-params">promise</span>)</span>.<span class="hljs-keyword">then</span>(<span class="hljs-keyword">val</span>=&gt;&#123;
+    <span class="hljs-keyword">val</span>.<span class="hljs-keyword">for</span><span class="hljs-constructor">Each(<span class="hljs-params">re</span>=&gt;<span class="hljs-params">console</span>.<span class="hljs-params">log</span>(<span class="hljs-params">re</span>)</span>)
+&#125;)
+<span class="hljs-comment">//&gt; Object &#123; status: &quot;fulfilled&quot;, value: 1 &#125;</span>
+<span class="hljs-comment">//&gt; Object &#123; status: &quot;fulfilled&quot;, value: 2 &#125;</span>
+<span class="hljs-comment">//&gt; Object &#123; status: &quot;rejected&quot;, reason: 3 &#125;</span>
+<span class="hljs-comment">//&gt; Object &#123; status: &quot;fulfilled&quot;, value: 4 &#125;</span></code></pre>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><p>根据其特性，不难实现allSettled，我们只需要得到所有的promise结果存到数组返回即可。</p>
+<pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myAllSettled</span>(<span class="hljs-params">promises</span>)</span>&#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-keyword">async</span> resolve=&gt;&#123;
+    <span class="hljs-keyword">let</span> data=[];
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> promises)&#123;
+      promise = promise <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Promise</span> ? promise : <span class="hljs-built_in">Promise</span>.resolve(promise)
+        <span class="hljs-keyword">await</span> promise.then(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>&#123;
+        data.push(&#123; <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;fulfilled&#x27;</span>, <span class="hljs-attr">value</span>: res &#125;);
+      &#125;,<span class="hljs-function"><span class="hljs-params">error</span>=&gt;</span>&#123;
+        data.push(&#123; <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;rejected&#x27;</span>, <span class="hljs-attr">reason</span>: error &#125;);
+      &#125;)
+    &#125;
+    resolve(data);
+  &#125;)
+&#125;</code></pre>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%89%8B%E5%86%99/">手写</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%89%8B%E5%86%99%E7%B3%BB%E5%88%97/">手写系列</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/09/SOLID/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SOLID</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/03/%E6%89%8B%E5%86%99/">
+                        <span class="hidden-mobile">手写汇总</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="remark42"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('remark42', function() {
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema !== 'light' && schema !== 'dark') {
+        schema = 'light';
+      }
+      var remark_config = {
+        host: 'http://42.192.68.190:8889',
+        site_id: 'qiupo',
+        components: ['embed'],
+        url: '/2020/10/03/promise%E4%B8%89%E5%85%84%E5%BC%9F/',
+        max_shown_comments: '10',
+        theme: schema,
+        page_title: 'Promise三兄弟all,race,allsettled',
+        locale: 'zh'
+      };
+
+      (function (c) {
+        for (var i = 0; i < c.length; i++) {
+          var d = document, s = d.createElement('script');
+          s.src = remark_config.host + '/web/' + c[i] + '.js';
+          s.defer = true;
+          (d.head || d.body).appendChild(s);
+        }
+      })(remark_config.components || [ 'embed' ]);
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">赣ICP备18015863号-2</a>
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,644 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicont.png">
+  <link rel="icon" type="image/png" href="/img/favicont.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="秋坡博客">
+  <meta name="author" content="Taoqiupo">
+  <meta name="keywords" content="">
+  <title>Event Loop解读 - qiupoBlog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":50,"cursorChar":"🇨🇳","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>QiuPo'Park</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/moonbg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Event Loop解读">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Taoqiupo
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-25 10:35" pubdate>
+        2020年11月25日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Event Loop解读</h1>
+            
+            <div class="markdown-body">
+              <h2 id="浏览器Event-Loop"><a href="#浏览器Event-Loop" class="headerlink" title="浏览器Event Loop"></a>浏览器Event Loop</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>To coordinate events, user interaction, scripts, rendering, networking, and so forth, user agents must use event loops as described in this section. Each agent has an associated event loop, which is unique to that agent.</p>
+<p>要想了解浏览器的事件机制，我们需要知道，浏览器的线程基本概念</p>
+<h3 id="浏览器进程线程"><a href="#浏览器进程线程" class="headerlink" title="浏览器进程线程"></a>浏览器进程线程</h3><p>浏览器中是多线程多进程的，我们每打开一个新的页面就会打开一个新的进程，每个进程中都会有多个线程在运作，其中常见的线程有以下几种：</p>
+<ol>
+<li>GUI渲染线程</li>
+</ol>
+<ul>
+<li>负责页面渲染，处理HTML，CSS解析，DOM树的构建、布局和绘制；</li>
+<li>当页面发生重绘重排时会重新调用此线程；</li>
+<li>该线程和JS线程互斥，所以当GUI执行时，JS会被挂起，JS线程执行时，GUI会被挂起，直到任务队列空了，才会去执行GUI</li>
+</ul>
+<ol start="2">
+<li>JS线程</li>
+</ol>
+<ul>
+<li>负责js代码的执行；</li>
+<li>执行准备好的事件；</li>
+</ul>
+<ol start="3">
+<li>定时器线程</li>
+</ol>
+<ul>
+<li>负责执行定时器任务例如：setTimeout,setInterval；</li>
+<li>主线程执行遇到定时器任务时，将任务加入定时器线程，在计时完毕后，任务会加入任务队列，等待JS线程的执行</li>
+</ul>
+<ol start="4">
+<li>事件触发线程</li>
+</ol>
+<p>负责将准备好的事件添加到任务队列，等待JS线程执行</p>
+<ol start="5">
+<li>异步请求线程</li>
+</ol>
+<p>负责执行异步请求一类的操作，如Promis，ajax，axios<br>主线程执行到了异步任务后，将任务讲给异步请求线程执行，执行完后，将回调函数添加到微任务队列，等待JS线程执行</p>
+<h2 id="事件队列"><a href="#事件队列" class="headerlink" title="事件队列"></a>事件队列</h2><p><strong>浏览器中的Event-loop</strong><br>浏览器中的事件循环机制中有两中队列，一个是宏任务一个是微任务，当主线程遇到同步操作时加入宏任务，遇到异步操作时加入微任务。常见的宏任务：setTimeout,setInterval，script（整段代码），I/O操作，UI渲染常见的微任务：Promise.then,MutationObserver<br>&emsp;&emsp;其中的执行机制是当某个宏任务执行完后,会查看是否有微任务队列。如果有，先执行微任务队列中的所有任务，如果没有，会读取宏任务队列中排在最前的任务，执行宏任务的过程中，遇到微任务，依次加入微任务队列。栈空后，再次读取微任务队列里的任务，依次类推。其中微任务是不打断的直接执行完一整个队列的任务。</p>
+<h3 id="宏任务"><a href="#宏任务" class="headerlink" title="宏任务"></a>宏任务</h3><h3 id="微任务"><a href="#微任务" class="headerlink" title="微任务"></a>微任务</h3><h3 id="一些题目解读"><a href="#一些题目解读" class="headerlink" title="一些题目解读"></a>一些题目解读</h3><p>可以通过一个例子来进行分析：</p>
+<ol>
+<li><pre><code class="hljs javascript"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;script start&#x27;</span>);
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async1</span>(<span class="hljs-params"></span>)</span>&#123;
+        <span class="hljs-keyword">await</span>  async2().then(<span class="hljs-function"><span class="hljs-params">_</span>=&gt;</span><span class="hljs-built_in">console</span>.log(_));
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;async1 end&#x27;</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;async1 return&#x27;</span>;
+    &#125;
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">async2</span>(<span class="hljs-params"></span>)</span>&#123;
+        <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;async2 promise&#x27;</span>)).then(<span class="hljs-function"><span class="hljs-params">_</span>=&gt;</span><span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;async2 then&#x27;</span>));
+        <span class="hljs-keyword">await</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;async2 await&#x27;</span>);
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;async2 end&#x27;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;async2 return&#x27;</span>;
+    &#125;
+    async1().then(<span class="hljs-function"><span class="hljs-params">_</span>=&gt;</span><span class="hljs-built_in">console</span>.log(_,<span class="hljs-string">&#x27;async1 then&#x27;</span>));
+
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;settimeout&#x27;</span>);
+    &#125;,<span class="hljs-number">0</span>);
+
+    <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> &#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;promise&#x27;</span>);
+        resolve();
+    &#125;).then(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;function1&#x27;</span>);
+    &#125;).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;function2&#x27;</span>);
+    &#125;);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;script end&#x27;</span>)</code></pre>
+在这个例子里：</li>
+</ol>
+<ul>
+<li>首先<strong>输出</strong><code>script start</code></li>
+<li>然后是<code>async1</code>的内容，此刻<code>await</code>执行<code>async2</code><strong>输出</strong><code>async2 promise</code>,然后<code>then</code>进入微任务</li>
+<li>然后下面的<code>await</code><strong>输出</strong><code>async2 await</code>，然后后面的阻塞，进入微任务</li>
+<li>然后继续执行，<strong>输出</strong><code>promise</code>，<code>then</code>进入微任务</li>
+<li>然后<strong>输出</strong><code>script end</code></li>
+<li>此时宏任务执行完一轮</li>
+<li>微任务开始执行，先<strong>输出</strong><code>async2 then</code>，<code>async2 end</code>，然后<code>return</code>值进入微任务，同一批次的微任务中继续执行<strong>输出</strong><code>function1</code>，然后<code>2then</code>又进入微任务</li>
+<li>继续执行微任务，此时先<strong>输出</strong><code>async2 return</code>，然后<code>async1</code>的<code>await</code>后的进入微任务</li>
+<li><strong>输出</strong><code>function2</code></li>
+<li>在执行微任务<strong>输出</strong><code>async1 end</code>，然后<code>1return</code>进入<code>async1().then(_=&gt;console.log(_,&#39;async1 then&#39;));</code>的微任务</li>
+<li><strong>输出</strong><code>async1 return</code>,<code>async1 then</code>，微任务为空，执行宏任务</li>
+<li><strong>输出</strong><code>settimeout</code></li>
+</ul>
+<p>最终顺序为</p>
+<pre><code class="hljs applescript"><span class="hljs-keyword">script</span> start
+async2 promise
+async2 await
+promise
+<span class="hljs-keyword">script</span> <span class="hljs-keyword">end</span>
+async2 <span class="hljs-keyword">then</span>
+async2 <span class="hljs-keyword">end</span>
+function1
+async2 <span class="hljs-literal">return</span>
+function2
+async1 <span class="hljs-keyword">end</span>
+async1 <span class="hljs-literal">return</span>
+async1 <span class="hljs-keyword">then</span>
+settimeout</code></pre>
+
+<ol>
+<li><pre><code class="hljs coffeescript"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;e1&#x27;</span>)
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">(r,j)</span>=&gt;</span>&#123;r()&#125;).<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;promise3&#x27;</span>);
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;timeout3&#x27;</span>)
+    &#125;,<span class="hljs-number">0</span>)
+&#125;)
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;timeout1&#x27;</span>)
+    <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">(r,j)</span>=&gt;</span>&#123;r()&#125;).<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;promise1&#x27;</span>)
+    &#125;)
+&#125;,<span class="hljs-number">5000</span>)
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;e2&#x27;</span>)
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">(r,j)</span>=&gt;</span>&#123;r(<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;1&#x27;</span>))&#125;).<span class="hljs-keyword">then</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;promise2&#x27;</span>);
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>&#123;
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;timeout2&#x27;</span>)
+    &#125;,<span class="hljs-number">0</span>)
+&#125;)
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;e3&#x27;</span>)</code></pre>
+在这个例子里：</li>
+</ol>
+<ul>
+<li>主线程<code>main</code>进入栈执行操作，此时执行<code>script</code>代码，会把<strong>输出</strong><code>e1</code></li>
+<li>之后遇到<code>Promise.then</code>，会将其加入微任务队列</li>
+<li>再往下执行，遇到<code>setTimeout</code>，将其加入定时器线程，等待计数完成后加入宏任务队列</li>
+<li>再往下执行<strong>输出</strong><code>e2</code></li>
+<li>往下执行遇到<code>Promise</code>，先将<code>resolve</code>输出1，然后将<code>then</code>加入微任务队列</li>
+<li>再往下执行<strong>输出</strong>e3，此时<code>script</code>代码执行完毕，立刻搜索微任务是否为空，不为空就立刻执行此时微任务的队列</li>
+<li>此时微任务队列先进先出输出<code>promise3</code>，然后遇到<code>setTimeout</code>，将其加入定时器线程，等待计数完成后加入宏任务队列</li>
+<li>再往下执行第二个微任务，输出<code>promise2</code>，然后遇到<code>setTimeout</code>，将其加入定时器线程，等待计数完成后加入宏任务队列</li>
+<li>再往下执行发现微任务队列为空，去宏任务队列去寻找是否有任务</li>
+<li>在宏任务发现此时先执行完的<code>setTimeout3</code>，输出<code>timeout3</code>，将<code>then</code>加入微任务队列</li>
+<li>执行完该次宏任务后立刻寻找微任务队列，为空，去寻找宏任务队列</li>
+<li>在宏任务发现先执行完的<code>setTimeout2</code>任务，执行<strong>输出</strong><code>timeout2</code></li>
+<li>此时任务队列为空，等待新任务加入</li>
+<li>此时<code>setTimeout1</code>计数完毕，加入宏任务队列，并执行，<strong>输出</strong><code>timeout1</code>，将<code>then</code>加入微任务队列</li>
+<li>执行完该次宏任务后立刻寻找微任务队列，并执行，<strong>输出</strong><code>promise1</code><br>最终结果为<pre><code class="hljs mercury">e1 
+e2 
+<span class="hljs-number">1</span> 
+e3 
+promise3 
+promise2 
+timeout3 
+timeout2 
+timeout1 
+<span class="hljs-keyword">promise</span></code></pre></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B3%BB%E5%88%97/">浏览器系列</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/22/%E9%9D%A2%E8%AF%95%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">面试题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/24/browser/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E6%96%B9%E5%BC%8F/">
+                        <span class="hidden-mobile">浏览器中的缓存方式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="remark42"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('remark42', function() {
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema !== 'light' && schema !== 'dark') {
+        schema = 'light';
+      }
+      var remark_config = {
+        host: 'http://42.192.68.190:8889',
+        site_id: 'qiupo',
+        components: ['embed'],
+        url: '/2020/11/25/browser/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/',
+        max_shown_comments: '10',
+        theme: schema,
+        page_title: 'Event Loop解读',
+        locale: 'zh'
+      };
+
+      (function (c) {
+        for (var i = 0; i < c.length; i++) {
+          var d = document, s = d.createElement('script');
+          s.src = remark_config.host + '/web/' + c[i] + '.js';
+          s.defer = true;
+          (d.head || d.body).appendChild(s);
+        }
+      })(remark_config.components || [ 'embed' ]);
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+  <!-- 备案信息 -->
+  <div class="beian">
+    <a href="http://beian.miit.gov.cn/" target="_blank"
+       rel="nofollow noopener">赣ICP备18015863号-2</a>
+    
+  </div>
+
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
