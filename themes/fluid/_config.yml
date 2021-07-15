@@ -598,9 +598,9 @@ post:
   # 评论插件
   # Comment plugin
   comments:
-    enable: false
+    enable: true
     # Options: disqus | valine | gitalk | utterances | changyan | livere | remark42 | twikoo
-    type: disqus
+    type: twikoo
 
 
 #---------------------------
@@ -699,7 +699,7 @@ remark42:
 # Based on Tencent CloudBase
 # See: https://twikoo.js.org
 twikoo:
-  env_id:
+  env_id: https://blog-talk-e49bh307m-qiupo.vercel.app/
 
 #---------------------------
 # 归档页
@@ -880,6 +880,6 @@ static_prefix:
 
   disqusjs: https://cdn.jsdelivr.net/npm/disqusjs@1.0/dist/
 
-  twikoo: https://cdn.jsdelivr.net/npm/twikoo@0.1.15/dist/
+  twikoo: https://cdn.jsdelivr.net/npm/twikoo@1.4.1/dist/
 
   hint: /lib/hint/
