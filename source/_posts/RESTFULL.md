@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2020-11-09 14:51:55
 tags: 设计模式
 category: restful
-index_img: https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201204145953.png
+index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201204145953.png
 ---
 ## 什么是RESTFUL架构
 REST代表`Respersontational State Transfer`，通常理解为表现层状态转移，他是围绕资源展开的，每个组件都是资源，都是可以通过唯一的URL访问到的，REST体系将所有的内容都视为资源，这些资源可以是文本、HTML页面、图像、视频或者业务数据。`REST Server`只提供对资源的访问，`REST Client`访问和修改这些资源，REST可以使用各种的形式来表现这些资源，主要是使用JSON，也可以是Text或者XML。

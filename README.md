@@ -1,2 +1,2 @@
-# qiupoBlog.github.io
+# qiupo.github.io
 qiupo的学习博客

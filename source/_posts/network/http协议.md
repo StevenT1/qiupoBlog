@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2020-11-23 11:15:33
 tags: 计算机网络
 category: http
-index_img: https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/1606103485414.jpg
+index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/1606103485414.jpg
 comment: true
 ---
 
@@ -15,13 +15,13 @@ comment: true
 什么是超文本？超越文本的内容就是超文本，早期的计算机是以文字进行传输的，后来的极速发展导致更多形式的数据可以进行传输，图像视频音频等，所以这些“文本”就被称为**超文本**；
 2. 传输
 我们要进行终端与终端间的传输，我们需要把文本转成二进制通过物理链路进行传输，其中双方还需要对传输进行响应，才能达到传输的目的
-![传输模型](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/1606103485414.jpg)
+![传输模型](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/1606103485414.jpg)
 3. 协议
 计算机之间通信需要互相遵循的规则，就是网络协议。http协议就是一种计算机之间通信的的规范和约束。
 ## 计算机网络协议模型
 ###  OSI七层模型
 &emsp;&emsp;ISO（国际标准化组织）提出来计算机网络应该按照7层来组织，于是诞生了OSI七层模型。
-![七层模型](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201123130249.png)
+![七层模型](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201123130249.png)
 我们从上往下看这七层模型都发挥了什么作用：
 + **应用层**
 特定网络应用协议存放的一层，为我们特定的网络应用提供服务我们平时的超文本传输协议`HTTP`，电子邮件传输的`SMTP`，文件传输的`FTP`，域名解析的`DNS`等等。
@@ -42,10 +42,10 @@ comment: true
 + **物理层**
 物理层的主要功能就是利用传输介质(例如：网线，无线电波，光)为数据链路层提供物理连接，实现比特流的透明传输。
 &emsp;&emsp;以上，建立在该网络模型之上，HTTP可以实现两点之间文字视频等超文本数据的传输。
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201123130640.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201123130640.png)
 ### TCP/IP 四层模型
 &emsp;&emsp;在TCP/IP中会话层和表示层被放在了应用层中，其他层主要内容是一样的。
-![TCP四层](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201125092256.png)
+![TCP四层](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201125092256.png)
 &emsp;&emsp;其上的两层分别是以下内容，其他层作用一样。
 + **应用层**
   主要有负责web浏览器的HTTP协议， 文件传输的FTP协议，负责电子邮件的SMTP协议，负责域名系统的DNS等。
@@ -61,22 +61,22 @@ comment: true
 5、服务器返回HTML响应
 6、浏览器处理HTML页面
 7、继续请求其他资源
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124110413.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124110413.png)
 
 ## HTTP工作流程
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201123204750.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201123204750.png)
 一次HTTP操作称为一次事务，可以分为四步：
 1、首先客户和服务器需要建立连接，用户点击一个链接或者发出一次请求，HTTP请求开始工作
 2、建立连接成功后，客户发送一个HTTP请求给服务器
 + HTTP请求组成：请求行、消息报头、请求正文，
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124113415.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124113415.png)
 + 请求的内容是以一个方法符号开头，后面跟着请求的`URL`、协议版本号、客户信息等别的可能的内容
 
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124113416.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124113416.png)
 3、服务器收到请求后，给予相应的响应信息
 + HTTP响应组成：状态行、消息报头、响应正文。
 + 内容包括：服务器HTTP协议的版本，服务器发回的响应状态代码和状态代码的文本描述、服务器信息等别的可能的内容
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124113711.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124113711.png)
 
 4、客户端收到服务器返回的信息通过浏览器显示在用户的显示屏上，确定没问题后断开连接
 
@@ -94,11 +94,11 @@ comment: true
 
 虽然`RFC 2616`中已经推荐了描述状态的短语，例如`200 OK`，`404 Not Found`，但是WEB开发者仍然能够自行决定采用何种短语，用以显示本地化的状态描述或者自定义信息。
 &emsp;&emsp;关于状态码，有些有意思的图解，虽然有些味道，但是描述的还挺形象的。
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124161902.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124161902.png)
 
 ## TCP的三次握手和四次挥手
 TCP的建立连接断开连接是通过三次握手四次挥手实现的，要理解这种连接方式，我们需要先知道**TCP报头**的组成方式，如下如所示：
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201123203435.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201123203435.png)
 其中比较重要的就是序号、确认号和标识位：
 1. 序号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记。
 2. 确认序号：Ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，Ack=Seq+1。（千万不要与标志位中的ACK搞混，这两个不是一个东西）
@@ -111,7 +111,7 @@ TCP的建立连接断开连接是通过三次握手四次挥手实现的，要�
    + FIN：释放一个连接。
 
 &emsp;&emsp;**三次握手四次挥手流程**
-![](https://cdn.jsdelivr.net/gh/StevenT1/myImages/img/20201124115039.png)
+![](https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201124115039.png)
 &emsp;&emsp;我们详细解读一下这个图的流程：
 1. **第一次握手：**
    首先，客户端发出请求，请求的标志符`SYN`为1，随意生成一个seq序号，告诉服务器“我想建立连接”，此时客户端进入`SYN_SENT`已发送阶段
