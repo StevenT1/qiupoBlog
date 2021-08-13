@@ -2,8 +2,8 @@
 title: 服务器v2ray协议学习
 author: Taoqiupo
 date: 2021-01-13 08:48:27
-tags: 服务器
-category: v2ray
+tags: v2ray
+category: 服务器
 index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20210113091123.png
 ---
 ## v2ray搭建
