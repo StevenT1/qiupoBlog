@@ -410,6 +410,7 @@ render方法中通过vdom中的`createEmptyVNode`方法来创建vnode节点，�
 | updated| 更新后，所有状态已是最新 |
 | beforeDestroy| 销毁前，可用于一些定时器或订阅的取消 |
 | destroyed | 组件已销毁，作用同上 |
+
 &ensp;在上面内容中总能看到lifecycle，这也是生命周期的文件，这不得重点关注一下，然后在刚刚看到的`_update`后面一下就找到了一个急救的东西`$forceUpdate`.
 ```javascript
   Vue.prototype.$forceUpdate = function () {
