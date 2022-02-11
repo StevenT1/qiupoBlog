@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2021-01-13 08:48:27
 tags: v2ray
 category: 服务器
-index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20210113091123.png
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20210113091123.png
 ---
 ## v2ray搭建
 &emsp;&emsp;之前看过一些网络协议，在研究的时候就发现有这么个v2ray的工具，可以加密连接，所以拿来研究以下。

@@ -4,7 +4,7 @@ date: 2020-10-03 21:46:01
 tags: 手写系列
 category: 手写
 author: Taoqiupo
-index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201125143223.png
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20201125143223.png
 ---
 ## all
 Promise.all(iterable) 方法返回一个 Promise 实例，此实例在 iterable 参数内所有的 promise 都“完成（resolved）”或参数中不包含 promise 时回调完成（resolve）；如果参数中  promise 有一个失败（rejected），此实例回调失败（reject），失败的原因是第一个失败 promise 的结果。

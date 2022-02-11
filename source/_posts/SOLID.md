@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2020-11-09 14:00:39
 tags: 设计模式
 category: solid
-index_img: https://cdn.jsdelivr.net/gh/qiupo/myImages/img/20201204151248.png
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20201204151248.png
 ---
 ## 设计模式之SOLID原则
 &emsp;&emsp;SOLID原则是为了让程序员更加轻松的开发出易于维护和拓展的软件，避免代码的冗杂，让我们可以很轻松的重构代码。`SOLID`原则的五大原则分别为：

@@ -2,19 +2,19 @@
 title: 复习知识之---vue篇
 author: Taoqiupo
 date: 2022-02-09 13:56:20
-tags:
-category:
-index_img: https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209135658.png
+tags: vue
+category: 复习
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209135658.png
 ---
 ### 首先应该记起的内容
 最应该想起的应该就是vue的生命周期部分，这是贯穿开发从始至终的部分，贴一张官网的生命周期图：
-![生命周期](https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209140454.png '生命周期')
+![生命周期](https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209140454.png '生命周期')
 
-&ensp;在vue中，我最常使用的包括created,beforeMount,mounted,beforeDestory(最新部分已经改成beforeUnmount),destoryed(最新部分已修改成unmounted)。从图中也能很清晰的看到整个vue生命周期钩子触发的流程。那vue从`new Vue()`开始整个流程是如何进行的呢？
+&emsp;&emsp;在vue中，我最常使用的包括created,beforeMount,mounted,beforeDestory(最新部分已经改成beforeUnmount),destoryed(最新部分已修改成unmounted)。从图中也能很清晰的看到整个vue生命周期钩子触发的流程。那vue从`new Vue()`开始整个流程是如何进行的呢？
 ## vue解析
 ### 1.入口
-&ensp;首先我们到github上看一下Vue是如何被定义的：
-*[src/core/instance/index.js](https://github.com/vuejs/vue/blob/dev/src/core/instance/index.js)*
+&emsp;&emsp;首先我们到github上看一下Vue是如何被定义的：
+*[src/core/instance/index.js](https://proxy.qiupo.workers.dev/?https://github.com/vuejs/vue/blob/dev/src/core/instance/index.js)*
 ```javascript
 import { initMixin } from './init'
 import { stateMixin } from './state'
@@ -40,9 +40,9 @@ renderMixin(Vue)
 
 export default Vue
 ```
-&ensp;从上面可以发现，所谓的`new Vue()`其实只是做了一个`_init(options)`操作，那这个`_init`函数是从哪里来的呢？
+&emsp;&emsp;从上面可以发现，所谓的`new Vue()`其实只是做了一个`_init(options)`操作，那这个`_init`函数是从哪里来的呢？
 PS：在这里不得不推荐一下Octotree这个插件，可以直接很便捷的找到这个方法是在哪里被定义了和被使用了
-![](https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209150114.png '使用图片')
+![](https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20220209150114.png '使用图片')
 
 从工具中可以找到该方法定义在同级的init.js文件中，其中init方法是在initMixin初始化时创建的，并将_init方法挂载到Vue的原型上。
 
@@ -106,7 +106,7 @@ export function initMixin (Vue: Class<Component>) {
   }
 }
 ```
-&ensp;从_init方法的执行顺序中可以发现以下代码段：
+&emsp;&emsp;从_init方法的执行顺序中可以发现以下代码段：
 ```javascript
     initLifecycle(vm)
     initEvents(vm)
@@ -117,7 +117,7 @@ export function initMixin (Vue: Class<Component>) {
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
 ```
-&ensp;仔细看看就能发现这一段先是初始化了一堆生命周期的标志符:
+&emsp;&emsp;仔细看看就能发现这一段先是初始化了一堆生命周期的标志符:
 ```javascript
 export function initLifecycle (vm: Component) {
   const options = vm.$options
@@ -222,10 +222,10 @@ export function initState (vm: Component) {
   }
 }
 ```
-&ensp;从这里可以看出，在`beforeCreate`的时候好数据初始化还没开始，data，props的属性访问不到，然后在`created`的时候props，methods，data，computed，watch都初始化完成了，但是此时还没有发生mount所以虽然能拿到数据但是还无法访问dom元素。在最后，使用vm.$mount方法进行挂载。
+&emsp;&emsp;从这里可以看出，在`beforeCreate`的时候好数据初始化还没开始，data，props的属性访问不到，然后在`created`的时候props，methods，data，computed，watch都初始化完成了，但是此时还没有发生mount所以虽然能拿到数据但是还无法访问dom元素。在最后，使用vm.$mount方法进行挂载。
 
 ### 2.挂载
-&ensp;在上面部分能看到整个初始化的流程，那mount是如何操作的呢？
+&emsp;&emsp;在上面部分能看到整个初始化的流程，那mount是如何操作的呢？
 ```javascript
 Vue.prototype.$mount = function (
   el?: string | Element,
@@ -298,9 +298,9 @@ export function mountComponent (
   return vm
 }
 ```
-&ensp;从代码里可以看到，在这里执行了`beforeMount`方法，在此之后定义了一个`updateComponent`方法，在随后`new Watcher`监听了当前组件的状态，如果有数据更新，就会触发`beforeUpdate`来进行更新操作，当`_isMounted`为true时，就会触发`mounted`的生命周期钩子了。
+&emsp;&emsp;从代码里可以看到，在这里执行了`beforeMount`方法，在此之后定义了一个`updateComponent`方法，在随后`new Watcher`监听了当前组件的状态，如果有数据更新，就会触发`beforeUpdate`来进行更新操作，当`_isMounted`为true时，就会触发`mounted`的生命周期钩子了。
 
-&ensp;那在这里面有两个函数格外引人注目，一个是`_update`一个是`_render`，因为这两个都涉及了很有意思的部分，一个是涉及到dom的更新，一个涉及到虚拟dom的生成。直接下钻找到他们的实现位置：
+&emsp;&emsp;那在这里面有两个函数格外引人注目，一个是`_update`一个是`_render`，因为这两个都涉及了很有意思的部分，一个是涉及到dom的更新，一个涉及到虚拟dom的生成。直接下钻找到他们的实现位置：
 + _update
 在代码中通过`setActiveInstance`保留当前作用域，然后使用`__patch__`去执行把vnode转成真实dom。在mount方法上一行就是`Vue.prototype.__patch__ = inBrowser ? patch : noop`，此时告诉我们patch方法的位置，追根溯源可以找到[patch.js](https://github.com/vuejs/vue/blob/23760b5c7a/src/core/vdom/patch.js)实现的位置，此处在vdom下，主要就是处理vnode的。
 ```javascript
@@ -411,7 +411,7 @@ render方法中通过vdom中的`createEmptyVNode`方法来创建vnode节点，�
 | beforeDestroy| 销毁前，可用于一些定时器或订阅的取消 |
 | destroyed | 组件已销毁，作用同上 |
 
-&ensp;在上面内容中总能看到lifecycle，这也是生命周期的文件，这不得重点关注一下，然后在刚刚看到的`_update`后面一下就找到了一个急救的东西`$forceUpdate`.
+&emsp;&emsp;在上面内容中总能看到lifecycle，这也是生命周期的文件，这不得重点关注一下，然后在刚刚看到的`_update`后面一下就找到了一个急救的东西`$forceUpdate`.
 ```javascript
   Vue.prototype.$forceUpdate = function () {
     const vm: Component = this

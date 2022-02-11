@@ -117,7 +117,7 @@ Contributors outside PR：[@zhugaoqi](https://github.com/zhugaoqi) [@julydate](h
 ## Thanks
 
 <a title="Thanks to JetBrains for providing the license" href="https://www.jetbrains.com/?from=hexo-theme-fluid" target="_blank">
-  <img src="https://raw.githubusercontent.com/fluid-dev/static/690616966f34a58d66aa15ac7b550dd7bbc03967/hexo-theme-fluid/jetbrains.svg" width="150" alt="JetBrains">
+  <img src="https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/fluid-dev/static/690616966f34a58d66aa15ac7b550dd7bbc03967/hexo-theme-fluid/jetbrains.svg" width="150" alt="JetBrains">
 </a>
 
 ## Star Trending

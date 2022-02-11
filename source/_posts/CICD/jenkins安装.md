@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2021-8-11 11:19:23
 tags: CI/CD
 category: jenkins
-index_img: https://raw.githubusercontent.com/qiupo/myImages/master/img/20210811102025.png
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/20210811102025.png
 comment: true
 ---
 
