@@ -4,7 +4,7 @@ author: Taoqiupo
 date: 2022-02-11 11:16:56
 tags: 浏览器系列
 category:   浏览器
-index_img: 
+index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qiupo/myImages/master/img/202202141333361.png
 ---
 ## 浏览器点击链接后的流程
 处理流程：
