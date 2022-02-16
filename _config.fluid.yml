@@ -370,7 +370,8 @@ footer:
   beian:
     enable: true
     # ICP证号
-    icp_text: 赣ICP备18015863号-2
+    # icp_text: 赣ICP备18015863号-2
+    icp_text: 
     # 公安备案号，不填则只显示ICP
     # police_text: 京公网安备12345678号
     police_text:

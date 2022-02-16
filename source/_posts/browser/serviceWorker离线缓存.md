@@ -91,5 +91,8 @@ self.addEventListener('install',funciton(event){
 + 如果旧的worker被中止了（页面关闭了），新的worker就会获得控制权了
 + 新的worker触发activate事件
 
+## 借助workbox
+&emsp;&emsp;如果我们自己写sw的过滤规则那真的是有点麻烦，好在已经有人已经写好了一组库帮助我们进行service worker的使用。[workbox](https://developers.google.com/web/tools/workbox/guides/get-started),可以帮助我们进行编写和管理service worker来进行缓存任务。
+
 
 
