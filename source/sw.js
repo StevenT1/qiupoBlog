@@ -7,7 +7,7 @@ var vendorCacheName = "vendor" + cacheVersion;
 var maxEntries = 70; /* 最大缓存数量 */
 
 // 图床缓存
-self.toolbox.router.get("/(.*)", self.toolbox.cacheFirst, {
+self.toolbox.router.get("/(.*)", self.toolbox.networkFirst, {
   origin: /proxy\.qiupo\.workers\.dev/,
   cache: {
     name: staticImageCacheName,
@@ -15,7 +15,7 @@ self.toolbox.router.get("/(.*)", self.toolbox.cacheFirst, {
   },
 });
 // 内容缓存
-self.toolbox.router.get("/(.*)", self.toolbox.cacheFirst, {
+self.toolbox.router.get("/(.*)", self.toolbox.networkFirst, {
   origin: /qiupo\.github\.io/,
   // origin: /localhost/,
   cache: {
