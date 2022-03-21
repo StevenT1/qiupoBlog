@@ -205,3 +205,5 @@ myAllConcurrence(promises)
 myALl(promises1)
   .then((re) => console.log(re))
   .catch((e) => console.log(e));
+
+  
