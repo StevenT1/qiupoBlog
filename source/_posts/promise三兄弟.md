@@ -52,7 +52,7 @@ function myAllConcurrence(promises){
       promise = promise instanceof Promise ? promise : Promise.resolve(promise);
       promise.then((result)=>{
         data.push(result);
-        num ? r(data) : num--;
+        num ? num-- : r(data);
         }).catch(e=>{
         isError=true;
         j(e);
