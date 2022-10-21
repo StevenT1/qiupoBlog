@@ -15,14 +15,14 @@ self.toolbox.router.get("/(.*)", self.toolbox.networkFirst, {
   },
 });
 // 内容缓存
-self.toolbox.router.get("/(.*)", self.toolbox.networkFirst, {
-  origin: /qiupo\.github\.io/,
-  // origin: /localhost/,
-  cache: {
-    name: contentCacheName,
-    maxEntries: maxEntries,
-  },
-});
+// self.toolbox.router.get("/(.*)", self.toolbox.networkFirst, {
+//   origin: /qiupo\.github\.io/,
+//   // origin: /localhost/,
+//   cache: {
+//     name: contentCacheName,
+//     maxEntries: maxEntries,
+//   },
+// });
 
 // cdn缓存
 self.toolbox.router.get("/(.*)", self.toolbox.cacheFirst, {
