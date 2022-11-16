@@ -16,8 +16,8 @@ index_img: https://proxy.qiupo.workers.dev/?https://raw.githubusercontent.com/qi
 + 46)[状态平滑动画]()
 + 47)[沿环形路径平移的动画]()
 ### CSS 背景与边框/图像/遮罩
-+ 1)[半透明边框]()
-+ 2)[多重边框]()
++ 1)[半透明边框](https://qiupo.github.io/2022/11/09/css/1-%E5%8D%8A%E9%80%8F%E6%98%8E%E8%BE%B9%E6%A1%86/)
++ 2)[多重边框](https://qiupo.github.io/2022/11/09/css/2-%E5%A4%9A%E9%87%8D%E8%BE%B9%E6%A1%86/)
 + 3)[灵活的背景定位]()
 + 4)[边框内圆角]()
 + 5)[条纹背景]()
