@@ -238,7 +238,7 @@ Vue.prototype.$mount = function (
 ......//
 }
 ```
-从方法中可以看到最后是调用了`mountComponent`方法挂载组件的。进入`mountComponent`方法能看到他实在lifecycle文件中的。
+从方法中可以看到最后是调用了`mountComponent`方法挂载组件的。进入`mountComponent`方法能看到他是在lifecycle文件中的。
 ```javascript
 export function mountComponent (
   vm: Component,
